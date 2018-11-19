@@ -4,7 +4,7 @@
 # import
 import cv2
 from datetime import datetime
-import json
+from httprequest import HttpRequest, StatusReq
 
 # read data file
 face_cascade_path = '/usr/share/opencv/haarcascades/'\
@@ -22,14 +22,10 @@ cap = cv2.VideoCapture(0)
 path_w = '/home/pi/Desktop/cloud/log/log.json'
 room_Name = 'C201'
 
-def out_res(in_room_no, in_timestamp, in_occupied):
-    #print in_timestamp.isoformat()
-    out_list = {"room-no": in_room_no, "timestamp": in_timestamp, "occupied": in_occupied}
-    
-    with open(path_w, mode='a') as f:
-        json.dump(out_list,f,indent=4)
 
 def main():
+    req = HttpRequest
+    req.run()
     while True:
         # get image
         ret, img = cap.read()    
@@ -46,7 +42,7 @@ def main():
             #time.microsecond = 0
             #time = time.isoformat()
             print time , ' human_num : ', human_num
-            out_res(room_Name, time, human_num)
+            req.put(StatusReq(room=in_occupied, timestamp=in_timestamp, occupied = in_occupied))
         
         # draw rect  
         for x, y, w, h in faces:
@@ -69,6 +65,9 @@ def main():
 
     cap.release()
     cv2.destroyAllWindows()
+
+    req.stop()
+    req.join()
 
 if __name__ == '__main__':
     main()
