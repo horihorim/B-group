@@ -20,12 +20,12 @@ cap = cv2.VideoCapture(0)
 
 # definition
 path_w = '/home/pi/Desktop/cloud/log/log.json'
-room_Name = 'C201'
+room_Name = '101'
 
 
 def main():
-    req = HttpRequest
-    req.run()
+    req = HttpRequest()
+    req.start()
     while True:
         # get image
         ret, img = cap.read()    
@@ -42,7 +42,7 @@ def main():
             #time.microsecond = 0
             #time = time.isoformat()
             print time , ' human_num : ', human_num
-            req.put(StatusReq(room=in_occupied, timestamp=in_timestamp, occupied = in_occupied))
+            req.add(StatusReq(room=room_Name, timestamp=time, occupied = human_num))
         
         # draw rect  
         for x, y, w, h in faces:
