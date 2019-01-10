@@ -1,6 +1,6 @@
 import requests
 from threading import Thread
-from Queue import Queue
+from queue import Queue
 from time import sleep
 import json
 
@@ -28,8 +28,8 @@ class HttpRequest(Thread):
             if not self.queue.empty():
                 q = self.queue.get()
                 self.queue.task_done()
-                print q.to_json()
-                print BASE_URL+q.PATH
+                print (q.to_json())
+                print (BASE_URL+q.PATH)
 
                 headers = {'content-type': 'application/json'}
                 requests.post(BASE_URL+q.PATH, data=q.to_json(), headers=headers)

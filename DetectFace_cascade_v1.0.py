@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/python3
 # -*- coding: utf-8 -*-
 
 # import
@@ -41,7 +41,7 @@ def main():
             time = datetime.now().isoformat()
             #time.microsecond = 0
             #time = time.isoformat()
-            print time , ' human_num : ', human_num
+            print (time , ' human_num : ', human_num)
             req.add(StatusReq(room=room_Name, timestamp=time, occupied = human_num))
         
         # draw rect  
