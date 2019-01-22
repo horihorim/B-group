@@ -5,6 +5,7 @@
 import cv2
 from datetime import datetime
 from httprequest import HttpRequest, StatusReq
+import hue
 
 # read data file
 face_cascade_path = '/usr/share/opencv/haarcascades/'\
@@ -26,6 +27,8 @@ room_Name = '101'
 def main():
     req = HttpRequest()
     req.start()
+    hthread = hue.HueThread(ip="192.168.10.2")
+    hthread.start()
     while True:
         # get image
         ret, img = cap.read()    
@@ -37,13 +40,16 @@ def main():
     
         # if face detect
         if(human_num > 0):
+            hthread.changeState(hue.MeetingStart())
             #time = datetime.now().strftime("%Y/%m/%d %H:%M:%S")
             time = datetime.now().isoformat()
             #time.microsecond = 0
             #time = time.isoformat()
             print (time , ' human_num : ', human_num)
             req.add(StatusReq(room=room_Name, timestamp=time, occupied = human_num))
-        
+        else:
+            hthread.changeState(hue.MeetingEnd())
+  
         # draw rect  
         for x, y, w, h in faces:
             cv2.rectangle(img, (x, y), (x + w, y + h), (255, 0, 0), 2)
